@@ -1,7 +1,7 @@
 var config = {
 	type: Phaser.AUTO,
-	width:750,
-	height:1334,
+	width:window.innerWidth,
+	height:window.innerHeight,//1334,
 	backgroundColor: '#FFFFFF',
 	scene:[MainMenu,GamePlay,GameOver]
 };
