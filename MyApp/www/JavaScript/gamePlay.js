@@ -1,19 +1,18 @@
 // TODO: 
-  // 1. Correct player speed on mobile phone 
-  // 2. Change player look and size
-  // 
+  // 1. Correct player speed on mobile phone +- Done
+  // 2. Create function for gameover.. DRY 
 class GamePlay extends Phaser.Scene{
 	constructor(){
 		super({key : 'gamePlay'});
 	}
 	preload(){
-		this.load.image('player','PNG/player.png');
 	}
 	
 	create(){
 		//Creating player, setting display size and interactive
-		GamePlay.player = this.add.sprite(config.width / 2,(config.height / 2)+100,'player').setInteractive();
-		GamePlay.player.setDisplaySize(25,25);
+		//GamePlay.player = new Phaser.Geom.Rectangle(config.width / 2,(config.height / 2)+100,16,16);
+		GamePlay.player = this.add.rectangle(config.width / 2,(config.height / 2)+100,16,16, 0x000000);
+		GamePlay.playerRotation = 0;
 		GamePlay.spaceBetween = config.width / 100 * 30;
 		GamePlay.obsticleHeight = 20;
 		GamePlay.minVisibleObsticle = 10;
@@ -23,9 +22,9 @@ class GamePlay extends Phaser.Scene{
 		GamePlay.rectY = 1;
 		GamePlay.rectX = 0;
 		GamePlay.counter = 0;
-		GamePlay.maxCounerValue = 8;
-		GamePlay.xStep = 2.5;
-		GamePlay.yStep = -6.5;
+		GamePlay.maxCounerValue = 30;
+		GamePlay.xStep = 5;
+		GamePlay.yStep = -8;
 		//Rectangle config
 		GamePlay.redRect = [new Phaser.Geom.Rectangle(
 											Math.floor(
@@ -50,8 +49,9 @@ class GamePlay extends Phaser.Scene{
 		GamePlay.greenRect[1].x = GamePlay.greenRect[0].x + GamePlay.greenRect[0].width + GamePlay.spaceBetween;
 		//Graphics config
 		GamePlay.graphics = this.add.graphics({fillStyle: { color: 0xff0000} });
-		GamePlay.graphics.fillRectShape(GamePlay.redRect[0]);
-		GamePlay.graphics.fillRectShape(GamePlay.redRect[1]);
+		//GamePlay.graphics.fillRectShape(GamePlay.redRect[0]);
+		//GamePlay.graphics.fillRectShape(GamePlay.redRect[1]);
+		
 		//Score config
 		GamePlay.score = 0;
 		GamePlay.scoreText = this.add.text(10, 50, 'score: 0', { fontSize: '24px', fill: '#000' });
@@ -62,6 +62,8 @@ class GamePlay extends Phaser.Scene{
 		GamePlay.greenScored = 0;
 	}
 	update(){
+		console.log('GamePlay.rect: ' + GamePlay.rectY);
+		GamePlay.player.angle += GamePlay.playerRotation;
 		//Clearing graphics data 
 		GamePlay.graphics.clear();
 		//Player movement X coordinate
@@ -82,6 +84,7 @@ class GamePlay extends Phaser.Scene{
 				GamePlay.blueRect[1].y += GamePlay.rectY ;
 				GamePlay.greenRect[0].y += GamePlay.rectY;
 			    GamePlay.greenRect[1].y += GamePlay.rectY;
+			    //console.log('GamePlay.rectY: ' + GamePlay.rectY);
 			}
 		}else if (GamePlay.player.y <= config.height/2 && GamePlay.rectY > 0){
 			GamePlay.player.y += GamePlay.rectY;
@@ -105,16 +108,10 @@ class GamePlay extends Phaser.Scene{
 		}else if(GamePlay.rectX < 0){
 			GamePlay.rectX += 1;
 		}
-		if (GamePlay.rectY < 3){
-			GamePlay.rectY += 1;
+		if (GamePlay.rectY < 4 && (GamePlay.counter < GamePlay.maxCounerValue/2 || 
+								   GamePlay.counter > 0 - GamePlay.maxCounerValue/2)){
+			GamePlay.rectY += 3;
 		}
-		//Y coordinates
-		//GamePlay.redRect[0].y += GamePlay.rectY;
-		//GamePlay.redRect[1].y += GamePlay.rectY;
-		//GamePlay.blueRect[0].y += GamePlay.rectY;
-		//GamePlay.blueRect[1].y += GamePlay.rectY;
-		//GamePlay.greenRect[0].y += GamePlay.rectY;
-		//GamePlay.greenRect[1].y += GamePlay.rectY;
 		//Fill
 		GamePlay.graphics.fillRectShape(GamePlay.redRect[0]);
 		GamePlay.graphics.fillRectShape(GamePlay.redRect[1]);
@@ -124,7 +121,6 @@ class GamePlay extends Phaser.Scene{
 		GamePlay.graphics.fillStyle(0x00ff00);
 		GamePlay.graphics.fillRectShape(GamePlay.greenRect[0]);
 		GamePlay.graphics.fillRectShape(GamePlay.greenRect[1]);
-		//Score counting and speed increasing
 		if(GamePlay.redRect[0].y > config.height/2 && GamePlay.redScored == 0){
 			GamePlay.redScored = 1;
 			GamePlay.score += 10;
@@ -227,29 +223,33 @@ class GamePlay extends Phaser.Scene{
 				GamePlay.counter = -1;
 			}
  		});
- 		//Movement trajectory
+ 		//Movement
  		if(GamePlay.counter > 0 && GamePlay.counter < GamePlay.maxCounerValue/2){
  			//console.log('I am in first if');
- 			GamePlay.rectX += GamePlay.xStep;
-			GamePlay.rectY += GamePlay.yStep;
+ 			GamePlay.rectX = GamePlay.xStep;
+			GamePlay.rectY = GamePlay.yStep;
+			GamePlay.playerRotation = 1;
 			GamePlay.counter += 1;
  		}else if(GamePlay.counter > 0 && GamePlay.counter < GamePlay.maxCounerValue){
- 			GamePlay.rectX += GamePlay.xStep;
+ 			GamePlay.rectX = GamePlay.xStep;
+ 			GamePlay.playerRotation = 1;
 			GamePlay.counter += 1;
  		}else if(GamePlay.counter < 0 && 
  				 GamePlay.counter > (GamePlay.maxCounerValue - (GamePlay.maxCounerValue * 2))/2){
  			//console.log('I am in second if');
- 			GamePlay.rectX -= GamePlay.xStep;
-			GamePlay.rectY += GamePlay.yStep;
+ 			GamePlay.rectX =  0 - GamePlay.xStep;
+			GamePlay.rectY = GamePlay.yStep;
+			GamePlay.playerRotation = -1;
 			GamePlay.counter -= 1;
  		}else if(GamePlay.counter < 0 && 
  				 GamePlay.counter > (GamePlay.maxCounerValue - (GamePlay.maxCounerValue * 2))){
- 			GamePlay.rectX -= GamePlay.xStep;
+ 			GamePlay.rectX = 0 - GamePlay.xStep;
+ 			GamePlay.playerRotation = -1;
 			GamePlay.counter -= 1;
  		}else{
  			GamePlay.counter = 0;
  		}
- 		console.log('GamePlay: ' + GamePlay.rectX);
+ 		//console.log('GamePlay.counter: ' + (GamePlay.maxCounerValue - (GamePlay.maxCounerValue * 2))/2);
 	}
 
 }
