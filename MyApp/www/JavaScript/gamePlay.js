@@ -1,5 +1,3 @@
-// TODO: 
-  // 1. Add more small obsticles
 class GamePlay extends Phaser.Scene{
 	constructor(){
 		super({key : 'gamePlay'});
@@ -103,7 +101,7 @@ class GamePlay extends Phaser.Scene{
 		}else if(GamePlay.player.x >= config.width && GamePlay.rectX < 0){
 			GamePlay.player.x += GamePlay.rectX;
 		}else if(GamePlay.player.x <= 0 && GamePlay.rectX > 0){
-			GamePlay.player.x += GamePlay.rectX;
+			GamePlay.player.x += GamePlay.rectX;a
 		}
 		//Player movement Y coordinate
 		if (GamePlay.player.y > config.height/2){
@@ -163,23 +161,29 @@ class GamePlay extends Phaser.Scene{
 
 
 		//Left Rectangle collapse
-		if(GamePlay.player.y <= GamePlay.redRect[0].y+GamePlay.redRect[0].height && GamePlay.player.x <= GamePlay.redRect[0].x + GamePlay.redRect[0].width){
+		if(GamePlay.player.y <= GamePlay.redRect[0].y+GamePlay.redRect[0].height+5 &&
+			GamePlay.player.x <= GamePlay.redRect[0].x + GamePlay.redRect[0].width){
 			this.gameOverCollaps(GamePlay.redRect[0].y,GamePlay.player.y);
 		}
-		if(GamePlay.player.y <= GamePlay.blueRect[0].y+GamePlay.blueRect[0].height && GamePlay.player.x <= GamePlay.blueRect[0].x + GamePlay.blueRect[0].width){
+		if(GamePlay.player.y <= GamePlay.blueRect[0].y+GamePlay.blueRect[0].height+5 && 
+			GamePlay.player.x <= GamePlay.blueRect[0].x + GamePlay.blueRect[0].width){
 			this.gameOverCollaps(GamePlay.blueRect[0].y,GamePlay.player.y);
 		}
-		if(GamePlay.player.y <= GamePlay.greenRect[0].y+GamePlay.greenRect[0].height && GamePlay.player.x <= GamePlay.greenRect[0].x + GamePlay.greenRect[0].width){
+		if(GamePlay.player.y <= GamePlay.greenRect[0].y+GamePlay.greenRect[0].height +5&& 
+			GamePlay.player.x <= GamePlay.greenRect[0].x + GamePlay.greenRect[0].width){
 			this.gameOverCollaps(GamePlay.greenRect[0].y,GamePlay.player.y);
 		}
 		//Right Rectangle collapse
-		if(GamePlay.player.y <= GamePlay.redRect[1].y+GamePlay.redRect[1].height && GamePlay.player.x >= GamePlay.redRect[1].x){
+		if(GamePlay.player.y <= GamePlay.redRect[1].y+GamePlay.redRect[1].height +5&& 
+			GamePlay.player.x >= GamePlay.redRect[1].x){
 			this.gameOverCollaps(GamePlay.redRect[1].y,GamePlay.player.y);
 		}
-		if(GamePlay.player.y <= GamePlay.blueRect[1].y+GamePlay.blueRect[1].height && GamePlay.player.x >= GamePlay.blueRect[1].x){
+		if(GamePlay.player.y <= GamePlay.blueRect[1].y+GamePlay.blueRect[1].height +5&& 
+			GamePlay.player.x >= GamePlay.blueRect[1].x){
 			this.gameOverCollaps(GamePlay.blueRect[1].y,GamePlay.player.y);
 		}
-		if(GamePlay.player.y <= GamePlay.greenRect[1].y+GamePlay.greenRect[1].height && GamePlay.player.x >= GamePlay.greenRect[1].x){
+		if(GamePlay.player.y <= GamePlay.greenRect[1].y+GamePlay.greenRect[1].height +5&& 
+			GamePlay.player.x >= GamePlay.greenRect[1].x){
 			this.gameOverCollaps(GamePlay.greenRect[1].y,GamePlay.player.y);
 		}
 		// End game 

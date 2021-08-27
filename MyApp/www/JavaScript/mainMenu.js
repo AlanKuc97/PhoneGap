@@ -7,7 +7,7 @@ class MainMenu extends Phaser.Scene{
 	}
 	create(){
 		this.start = this.add.sprite(config.width/2,config.height/2,'play');
-		this.start.setScale(0.1);
+		this.start.setScale(0.8);
 		this.startY = 1;
 		//highScore
 		this.highScore =0;
