@@ -35,7 +35,19 @@ class GamePlay extends Phaser.Scene{
 		GamePlay.greenRect[0].y += rectY;
 		GamePlay.greenRect[1].y += rectY;
 	}
-
+    fillObsticles(){
+		GamePlay.graphics.fillStyle(GamePlay.redRect[2]); 
+		GamePlay.graphics.fillRectShape(GamePlay.redRect[0]);
+		GamePlay.graphics.fillRectShape(GamePlay.redRect[1]);
+		GamePlay.colorArrIndex = GamePlay.colorArr.length * Math.random() | 0;
+		GamePlay.graphics.fillStyle(GamePlay.blueRect[2]); 
+		GamePlay.graphics.fillRectShape(GamePlay.blueRect[0]);
+		GamePlay.graphics.fillRectShape(GamePlay.blueRect[1]);
+		GamePlay.colorArrIndex = GamePlay.colorArr.length * Math.random() | 0;
+		GamePlay.graphics.fillStyle(GamePlay.greenRect[2]); 
+		GamePlay.graphics.fillRectShape(GamePlay.greenRect[0]);
+		GamePlay.graphics.fillRectShape(GamePlay.greenRect[1]);
+	}
 	create(){
 		//Creating player, setting display size and interactive
 		//GamePlay.player = new Phaser.Geom.Rectangle(config.width / 2,(config.height / 2)+100,16,16);
@@ -59,26 +71,28 @@ class GamePlay extends Phaser.Scene{
 												Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN,215,
 												config.width,GamePlay.obsticleHeight 
 												), 
-						new Phaser.Geom.Rectangle(550,215,config.width,GamePlay.obsticleHeight)];
+						new Phaser.Geom.Rectangle(550,215,config.width,GamePlay.obsticleHeight),0x000000];
 		GamePlay.redRect[1].x = GamePlay.redRect[0].x + GamePlay.redRect[0].width + GamePlay.spaceBetween;
 		GamePlay.blueRect = [new Phaser.Geom.Rectangle(
 											Math.floor(
 												Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN,-185,
 												config.width,GamePlay.obsticleHeight 
 												), 
-						new Phaser.Geom.Rectangle(550,-185,config.width,GamePlay.obsticleHeight)];
+						new Phaser.Geom.Rectangle(550,-185,config.width,GamePlay.obsticleHeight),0x000000];
 		GamePlay.blueRect[1].x = GamePlay.blueRect[0].x + GamePlay.blueRect[0].width + GamePlay.spaceBetween;
 		GamePlay.greenRect = [new Phaser.Geom.Rectangle(
 											Math.floor(
 												Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN,-585,
 												config.width,GamePlay.obsticleHeight 
 												), 
-						  new Phaser.Geom.Rectangle(550,-585,config.width,GamePlay.obsticleHeight)];
+						  new Phaser.Geom.Rectangle(550,-585,config.width,GamePlay.obsticleHeight), 0x000000];
 		GamePlay.greenRect[1].x = GamePlay.greenRect[0].x + GamePlay.greenRect[0].width + GamePlay.spaceBetween;
 		//Graphics config
-		GamePlay.graphics = this.add.graphics({fillStyle: { color: 0xAF1A12} });
-		//GamePlay.graphics.fillRectShape(GamePlay.redRect[0]);
-		//GamePlay.graphics.fillRectShape(GamePlay.redRect[1]);
+		GamePlay.colorArr = [0x0D71FD,0x1A841A,0xAF1A12,0x5ca858,0xd16b11,0x0035f5,0xf5ff3d];
+		GamePlay.graphics = this.add.graphics();
+		GamePlay.redRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
+		GamePlay.blueRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
+		GamePlay.greenRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
 		
 		//Score config
 		GamePlay.score = 0;
@@ -88,7 +102,7 @@ class GamePlay extends Phaser.Scene{
 		GamePlay.redScored = 0;
 		GamePlay.blueScored = 0;
 		GamePlay.greenScored = 0;
-
+		
 	}
 
 	update(){
@@ -125,33 +139,29 @@ class GamePlay extends Phaser.Scene{
 								   GamePlay.counter > 0 - GamePlay.maxCounerValue/2)){
 			GamePlay.rectY += 3;
 		}
-		//Fill
-		GamePlay.graphics.fillRectShape(GamePlay.redRect[0]);
-		GamePlay.graphics.fillRectShape(GamePlay.redRect[1]);
-		GamePlay.graphics.fillStyle(0x0D71FD); 
-		GamePlay.graphics.fillRectShape(GamePlay.blueRect[0]);
-		GamePlay.graphics.fillRectShape(GamePlay.blueRect[1]);
-		GamePlay.graphics.fillStyle(0x1A841A);
-		GamePlay.graphics.fillRectShape(GamePlay.greenRect[0]);
-		GamePlay.graphics.fillRectShape(GamePlay.greenRect[1]);
+		//Fill 
+		this.fillObsticles();
 		
 		//Check scored
 		this.gameScore();
 
 		//Rectangle Loop
 		if(GamePlay.redRect[0].y > config.height){
+			GamePlay.redRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
 			GamePlay.redRect[0].y = GamePlay.greenRect[0].y - 400;
 			GamePlay.redRect[1].y = GamePlay.greenRect[0].y - 400;
 			GamePlay.redRect[0].x = Math.floor(Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN;
 			GamePlay.redRect[1].x = GamePlay.redRect[0].x + GamePlay.redRect[0].width + GamePlay.spaceBetween;
 			GamePlay.redScored = 0;
 		}else if(GamePlay.blueRect[0].y > config.height){
+			GamePlay.blueRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
 			GamePlay.blueRect[0].y = GamePlay.redRect[0].y - 400;
 			GamePlay.blueRect[1].y = GamePlay.redRect[0].y - 400;
 			GamePlay.blueRect[0].x = Math.floor(Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN;
 			GamePlay.blueRect[1].x = GamePlay.blueRect[0].x + GamePlay.blueRect[0].width + GamePlay.spaceBetween;
 			GamePlay.blueScored = 0;
 		}else if(GamePlay.greenRect[0].y > config.height){
+			GamePlay.greenRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
 			GamePlay.greenRect[0].y = GamePlay.blueRect[0].y - 400;
 			GamePlay.greenRect[1].y = GamePlay.blueRect[0].y - 400;
 			GamePlay.greenRect[0].x = Math.floor(Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN;

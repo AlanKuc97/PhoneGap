@@ -6,7 +6,7 @@ class MainMenu extends Phaser.Scene{
 		this.load.image('play','PNG/startBtn.png');
 	}
 	create(){
-		this.start = this.add.sprite(config.width/2,config.height/2,'play');
+		this.start = this.add.sprite(config.width/2,config.height/2,'play').setOrigin(0.5);
 		this.start.setScale(0.8);
 		this.startY = 1;
 		//highScore
@@ -18,6 +18,8 @@ class MainMenu extends Phaser.Scene{
 		}
 		this.highScoreText = this.add.text(10, 50, 'score:', { fontSize: '24px', fill: '#000' });
 		this.highScoreText.setText('High Score:' + this.highScore);
+		this.nameText = this.add.text(config.width/2,config.height/2 - 100 ,
+									 'Amazing Rect' , { fontSize: '34px', fill: '#000' }).setOrigin(0.5);
 		//
 		this.input.once('pointerdown', function (event) {
            		this.scene.start('gamePlay');

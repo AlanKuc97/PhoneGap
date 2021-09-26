@@ -22,12 +22,18 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-statusbar": {}
+      "cordova-plugin-statusbar": {},
+      "cordova-admob-sdk": {
+        "PLAY_SERVICES_VERSION": "11.0.1"
+      }
     },
     "platforms": [
       "browser",
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
+  },
+  "dependencies": {
+    "cordova-admob-sdk": "^0.24.1"
   }
 }
