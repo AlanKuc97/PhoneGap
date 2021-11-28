@@ -15,12 +15,21 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-    <platform name="android">
+    <platform name="android" >
         <allow-intent href="market:*" />
+        <icon src="www/PNG/ldpi.png" density="ldpi" />
+        <icon src="www/PNG/mdpi.png" density="mdpi" />
+        <icon src="www/PNG/hdpi.png" density="hdpi" />
+        <icon src="www/PNG/xhdpi.png" density="xhdpi" />
+        <icon src="www/PNG/xxhdpi.png" density="xxhdpi" />
+        <icon src="www/PNG/xxxhdpi.png" density="xxxhdpi" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
     <preference name="android-targetSdkVersion" value="30" />
+    <!-- cordova platform remove android 
+         cordova platform add android 
+         if not compiling-->
 </widget>

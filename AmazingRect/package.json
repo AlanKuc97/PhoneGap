@@ -28,9 +28,9 @@
       }
     },
     "platforms": [
-      "android",
       "browser",
-      "ios"
+      "ios",
+      "android"
     ]
   },
   "dependencies": {
