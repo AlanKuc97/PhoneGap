@@ -19,7 +19,7 @@
                 transform: translate(-50%, -50%);
             }
         </style>
-	    <script src="https://connect.facebook.net/en_US/fbinstant.6.2.js"></script>
+	    <!-- <script src="https://connect.facebook.net/en_US/fbinstant.6.2.js"></script> -->
         <script src="JavaScript/phaser.js"></script>
         <script src = "JavaScript/mainMenu.js"></script>
 	    <script src = "JavaScript/gamePlay.js"></script>
@@ -29,13 +29,14 @@
     <body>
         <script src="cordova.js"></script>
         <script type="text/javascript">
-            document.addEventListener('deviceready', function(){
-                admob.banner.prepare();
-                admob.banner.show({
-                    id:'ca-app-pub-6536582897404038/4027221482',
-                    autoShow:true
-                })
-            }, false);
+            let banner;
+
+            document.addEventListener('deviceready', async () => {
+                banner = new admob.BannerAd({
+                    adUnitId: 'ca-app-pub-6536582897404038/4027221482',
+                });
+                await banner.show();
+            },false);
         </script>
     </body>
 </html>

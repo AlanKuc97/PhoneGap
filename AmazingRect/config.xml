@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.amazingrect.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.amazingrect.app" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>AmazingRect</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
@@ -23,12 +23,12 @@
         <icon src="www/PNG/xhdpi.png" density="xhdpi" />
         <icon src="www/PNG/xxhdpi.png" density="xxhdpi" />
         <icon src="www/PNG/xxxhdpi.png" density="xxxhdpi" />
+        <preference name="AndroidXEnabled" value="true" />
+        <preference name="android-targetSdkVersion" value="30" />
+        <preference name="StatusBarOverlaysWebView" value="false" />
     </platform>
-    <platform name="ios">
-        <allow-intent href="itms:*" />
-        <allow-intent href="itms-apps:*" />
-    </platform>
-    <preference name="android-targetSdkVersion" value="30" />
+    
+    <!-- <preference name="android-compileSdkVersion" value="30" /> -->
     <!-- cordova platform remove android 
          cordova platform add android 
          if not compiling-->

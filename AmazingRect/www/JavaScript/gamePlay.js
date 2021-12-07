@@ -4,141 +4,204 @@ class GamePlay extends Phaser.Scene{
 	}
 	preload(){
 	}
-	gameOverCollaps(rectY, playerY){
-		if (rectY <= playerY){
-			if(GamePlay.score > parseInt(localStorage.getItem("makeItHighScore"))){
-				localStorage.setItem("makeItHighScore", GamePlay.score);
-			}
-			this.scene.start('gameOver');
+	gameOverCollaps(){
+		if(this.score > parseInt(localStorage.getItem("makeItHighScore"))){
+			localStorage.setItem("makeItHighScore", this.score);
 		}
+		this.scene.start('gameOver');
 	}
 	gameScore(){
-		if(GamePlay.redRect[0].y > config.height/2 && GamePlay.redScored == 0){
-			GamePlay.redScored = 1;
-			GamePlay.score += 10;
-			GamePlay.scoreText.setText('Score: ' + GamePlay.score);
-		}else if(GamePlay.blueRect[0].y > config.height/2 && GamePlay.blueScored == 0){
-			GamePlay.blueScored = 1;
-			GamePlay.score += 10;
-			GamePlay.scoreText.setText('Score: ' + GamePlay.score);
-		}else if(GamePlay.greenRect[0].y > config.height/2 && GamePlay.greenScored == 0){
-			GamePlay.greenScored = 1;
-			GamePlay.score += 10;
-			GamePlay.scoreText.setText('Score: ' + GamePlay.score);
+		if(this.firstRect[0].y > config.height/2 && this.firstScored == 0){
+			this.firstScored = 1;
+			this.score += 10;
+			this.scoreText.setText('Score: ' + this.score);
+		}else if(this.thirdRect[0].y > config.height/2 && this.thirdScored == 0){
+			this.thirdScored = 1;
+			this.score += 10;
+			this.scoreText.setText('Score: ' + this.score);
+		}else if(this.secondRect[0].y > config.height/2 && this.secondScored == 0){
+			this.secondScored = 1;
+			this.score += 10;
+			this.scoreText.setText('Score: ' + this.score);
 		}
 	}
 	gameDownObsticles(rectY){
-		GamePlay.redRect[0].y += rectY;
-		GamePlay.redRect[1].y += rectY;
-		GamePlay.blueRect[0].y += rectY;
-		GamePlay.blueRect[1].y += rectY ;
-		GamePlay.greenRect[0].y += rectY;
-		GamePlay.greenRect[1].y += rectY;
+		this.firstRect[0].y += rectY;
+		this.firstRect[1].y += rectY;
+		this.thirdRect[0].y += rectY;
+		this.thirdRect[1].y += rectY ;
+		this.secondRect[0].y += rectY;
+		this.secondRect[1].y += rectY;
 	}
     fillObsticles(){
-		GamePlay.graphics.fillStyle(GamePlay.redRect[2]); 
-		GamePlay.graphics.fillRectShape(GamePlay.redRect[0]);
-		GamePlay.graphics.fillRectShape(GamePlay.redRect[1]);
-		GamePlay.colorArrIndex = GamePlay.colorArr.length * Math.random() | 0;
-		GamePlay.graphics.fillStyle(GamePlay.blueRect[2]); 
-		GamePlay.graphics.fillRectShape(GamePlay.blueRect[0]);
-		GamePlay.graphics.fillRectShape(GamePlay.blueRect[1]);
-		GamePlay.colorArrIndex = GamePlay.colorArr.length * Math.random() | 0;
-		GamePlay.graphics.fillStyle(GamePlay.greenRect[2]); 
-		GamePlay.graphics.fillRectShape(GamePlay.greenRect[0]);
-		GamePlay.graphics.fillRectShape(GamePlay.greenRect[1]);
+		this.firstRect[0].setFillStyle(this.firstRect[2]);
+		this.firstRect[1].setFillStyle(this.firstRect[2]);
+		this.secondRect[0].setFillStyle(this.secondRect[2]);
+		this.secondRect[1].setFillStyle(this.secondRect[2]);
+		this.thirdRect[0].setFillStyle(this.thirdRect[2]);
+		this.thirdRect[1].setFillStyle(this.thirdRect[2]);
+	}
+	playerMovement(){
+		//Player movement X coordinate
+		if(this.player.x > 0 && this.player.x < config.width){
+			this.player.x += this.rectX;
+		}else if(this.player.x >= config.width && this.rectX < 0){
+			this.player.x += this.rectX;
+		}else if(this.player.x <= 0 && this.rectX > 0){
+			this.player.x += this.rectX;
+		}
+		//Player movement Y coordinate
+		if (this.player.y > config.height/2){
+			this.player.y += this.rectY;
+			if(this.player.y < config.height/2 + 50 && this.rectY > 0){
+			 	this.gameDownObsticles(this.rectY);
+			}
+		}else if (this.player.y <= config.height/2 && this.rectY > 0){
+			this.player.y += this.rectY;
+		 	this.gameDownObsticles(this.rectY);
+		}else{
+		    this.gameDownObsticles(-this.rectY);
+		}
+		//Player direction
+		if (this.rectX > 0) {
+			this.rectX -= 1;
+		}else if(this.rectX < 0){
+			this.rectX += 1;
+		}
+		if (this.rectY < 4 && (this.counter < this.maxCounerValue/2 || 
+								   this.counter > 0 - this.maxCounerValue/2)){
+			this.rectY += 3;
+		}
+		//Movement
+		if(this.counter > 0 && this.counter < this.maxCounerValue/2){
+			this.rectX = this.xStep;
+		   this.rectY = this.yStep;
+		   this.playerRotation = 2;
+		   this.counter += 1;
+		}else if(this.counter > 0 && this.counter < this.maxCounerValue){
+			this.rectX = this.xStep;
+			this.playerRotation = 2;
+		   this.counter += 1;
+		}else if(this.counter < 0 && 
+				 this.counter > (this.maxCounerValue - (this.maxCounerValue * 2))/2){
+			this.rectX = -this.xStep;
+		   this.rectY = this.yStep;
+		   this.playerRotation = -2;
+		   this.counter -= 1;
+		}else if(this.counter < 0 && 
+				 this.counter > (this.maxCounerValue - (this.maxCounerValue * 2))){
+			this.rectX = -this.xStep;
+			this.playerRotation = -2;
+		   this.counter -= 1;
+		}else{
+			this.counter = 0;
+		}
+	}
+	rectangleLoop(){
+		if(this.firstRect[0].y > config.height){
+			this.firstRect[2] = this.colorArr[this.colorArr.length * Math.random() | 0];
+			this.firstRect[0].y = this.secondRect[0].y - 400;
+			this.firstRect[1].y = this.secondRect[0].y - 400;
+			this.firstRect[0].x = Math.floor(Math.random() * (this.MAX - this.MIN) + this.MIN);
+			this.firstRect[1].x = this.firstRect[0].x + this.firstRect[0].width + this.spaceBetween;
+			this.firstScored = 0;
+		}else if(this.thirdRect[0].y > config.height){
+			this.thirdRect[2] = this.colorArr[this.colorArr.length * Math.random() | 0];
+			this.thirdRect[0].y = this.firstRect[0].y - 400;
+			this.thirdRect[1].y = this.firstRect[0].y - 400;
+			this.thirdRect[0].x = Math.floor(Math.random() * (this.MAX - this.MIN) + this.MIN);
+			this.thirdRect[1].x = this.thirdRect[0].x + this.thirdRect[0].width + this.spaceBetween;
+			this.thirdScored = 0;
+		}else if(this.secondRect[0].y > config.height){
+			this.secondRect[2] = this.colorArr[this.colorArr.length * Math.random() | 0];
+			this.secondRect[0].y = this.thirdRect[0].y - 400;
+			this.secondRect[1].y = this.thirdRect[0].y - 400;
+			this.secondRect[0].x = Math.floor(Math.random() * (this.MAX - this.MIN) + this.MIN);
+			this.secondRect[1].x = this.secondRect[0].x + this.secondRect[0].width + this.spaceBetween;
+			this.secondScored = 0;
+		}
 	}
 	create(){
 		//Creating player, setting display size and interactive
-		//GamePlay.player = new Phaser.Geom.Rectangle(config.width / 2,(config.height / 2)+100,16,16);
-		GamePlay.player = this.add.rectangle(config.width / 2,(config.height / 2)+100,16,16, 0x000000);
-		GamePlay.playerRotation = 0;
-		GamePlay.spaceBetween = config.width / 100 * 30;
-		GamePlay.obsticleHeight = 40;
-		GamePlay.minVisibleObsticle = 10;
-		GamePlay.MAX = 0 - GamePlay.spaceBetween - GamePlay.minVisibleObsticle;
-		GamePlay.MIN = GamePlay.minVisibleObsticle - config.width;
+		this.player = this.add.rectangle(config.width / 2,(config.height / 2)+100,16,16, 0x000000);
+		this.playerRotation = 0;
+		this.spaceBetween = config.width / 100 * 30;
+		this.obsticleHeight = 40;
+		this.minVisibleObsticle = 30;
+		this.MAX = (config.width/2) - this.spaceBetween - this.minVisibleObsticle;
+		this.MIN = this.minVisibleObsticle - (config.width/2);
 		//Rectangle coordinates
-		GamePlay.rectY = 1;
-		GamePlay.rectX = 0;
-		GamePlay.counter = 0;
-		GamePlay.maxCounerValue = 30;
-		GamePlay.xStep = 5;
-		GamePlay.yStep = -8;
+		this.rectY = 1;
+		this.rectX = 0;
+		this.counter = 0;
+		this.maxCounerValue = 30;
+		this.xStep = 5;
+		this.yStep = -8;
 		//Rectangle config
-		GamePlay.redRect = [new Phaser.Geom.Rectangle(
+		this.firstRect = [this.add.rectangle(
 											Math.floor(
-												Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN,215,
-												config.width,GamePlay.obsticleHeight 
+												Math.random() * (this.MAX - this.MIN) + this.MIN),215,
+												config.width,this.obsticleHeight,0x000000 
 												), 
-						new Phaser.Geom.Rectangle(550,215,config.width,GamePlay.obsticleHeight),0x000000];
-		GamePlay.redRect[1].x = GamePlay.redRect[0].x + GamePlay.redRect[0].width + GamePlay.spaceBetween;
-		GamePlay.blueRect = [new Phaser.Geom.Rectangle(
+						this.add.rectangle(550,215,config.width,this.obsticleHeight,0x000000),0x000000];
+		this.firstRect[1].x = this.firstRect[0].x + this.firstRect[0].width + this.spaceBetween;
+		this.thirdRect = [this.add.rectangle(
 											Math.floor(
-												Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN,-185,
-												config.width,GamePlay.obsticleHeight 
+												Math.random() * (this.MAX - this.MIN) + this.MIN),-185,
+												config.width,this.obsticleHeight,0x000000 
 												), 
-						new Phaser.Geom.Rectangle(550,-185,config.width,GamePlay.obsticleHeight),0x000000];
-		GamePlay.blueRect[1].x = GamePlay.blueRect[0].x + GamePlay.blueRect[0].width + GamePlay.spaceBetween;
-		GamePlay.greenRect = [new Phaser.Geom.Rectangle(
+						this.add.rectangle(550,-185,config.width,this.obsticleHeight,0x000000),0x000000];
+		this.thirdRect[1].x = this.thirdRect[0].x + this.thirdRect[0].width + this.spaceBetween;
+		this.secondRect = [this.add.rectangle(
 											Math.floor(
-												Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN,-585,
-												config.width,GamePlay.obsticleHeight 
+												Math.random() * (this.MAX - this.MIN) + this.MIN),-585,
+												config.width,this.obsticleHeight,0x000000 
 												), 
-						  new Phaser.Geom.Rectangle(550,-585,config.width,GamePlay.obsticleHeight), 0x000000];
-		GamePlay.greenRect[1].x = GamePlay.greenRect[0].x + GamePlay.greenRect[0].width + GamePlay.spaceBetween;
+						  this.add.rectangle(550,-585,config.width,this.obsticleHeight,0x000000), 0x000000];
+		this.secondRect[1].x = this.secondRect[0].x + this.secondRect[0].width + this.spaceBetween;
 		//Graphics config
-		GamePlay.colorArr = [0x0D71FD,0x1A841A,0xAF1A12,0x5ca858,0xd16b11,0x0035f5,0xf5ff3d];
-		GamePlay.graphics = this.add.graphics();
-		GamePlay.redRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
-		GamePlay.blueRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
-		GamePlay.greenRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
+		this.colorArr = [0x0D71FD,0x1A841A,0xAF1A12,0x5ca858,0xd16b11,0x0035f5,0xf5ff3d];
+		this.graphics = this.add.graphics();
+		this.firstRect[2] = this.colorArr[this.colorArr.length * Math.random() | 0];
+		this.thirdRect[2] = this.colorArr[this.colorArr.length * Math.random() | 0];
+		this.secondRect[2] = this.colorArr[this.colorArr.length * Math.random() | 0];
 		
 		//Score config
-		GamePlay.score = 0;
-		GamePlay.scoreText = this.add.text(10, 50, 'score: 0', { fontSize: '24px', fill: '#000' });
-		GamePlay.scoreText.setText('Score: ' + GamePlay.score);
+		this.score = 0;
+		this.scoreText = this.add.text(10, 50, 'score: 0', { fontSize: '24px', fill: '#000' });
+		this.scoreText.setText('Score: ' + this.score);
+
 		//Flags to notice if rectangles > 750 to score		
-		GamePlay.redScored = 0;
-		GamePlay.blueScored = 0;
-		GamePlay.greenScored = 0;
-		
+		this.firstScored = 0;
+		this.secondScored = 0;
+		this.thirdScored = 0;
+
+		this.physics.add.existing(this.player);
+		this.physics.add.existing(this.firstRect[0]);
+		this.physics.add.existing(this.firstRect[1]);
+		this.physics.add.existing(this.secondRect[0]);
+		this.physics.add.existing(this.secondRect[1]);
+		this.physics.add.existing(this.thirdRect[0]);
+		this.physics.add.existing(this.thirdRect[1]);
 	}
 
 	update(){
-		GamePlay.player.angle += GamePlay.playerRotation;
 		//Clearing graphics data 
-		GamePlay.graphics.clear();
-		//Player movement X coordinate
-		if(GamePlay.player.x > 0 && GamePlay.player.x < config.width){
-			GamePlay.player.x += GamePlay.rectX;
-		}else if(GamePlay.player.x >= config.width && GamePlay.rectX < 0){
-			GamePlay.player.x += GamePlay.rectX;
-		}else if(GamePlay.player.x <= 0 && GamePlay.rectX > 0){
-			GamePlay.player.x += GamePlay.rectX;a
+		this.graphics.clear();
+		//Collapse
+		if( this.physics.collide(this.player, this.firstRect[0]) || 
+			this.physics.collide(this.player, this.firstRect[1]) ||
+			this.physics.collide(this.player, this.secondRect[0]) ||
+			this.physics.collide(this.player, this.secondRect[1]) ||
+			this.physics.collide(this.player, this.thirdRect[0]) ||
+			this.physics.collide(this.player, this.thirdRect[1])){
+			this.gameOverCollaps();
 		}
-		//Player movement Y coordinate
-		if (GamePlay.player.y > config.height/2){
-			GamePlay.player.y += GamePlay.rectY;
-			if(GamePlay.player.y < config.height/2 + 50 && GamePlay.rectY > 0){
-			 	this.gameDownObsticles(GamePlay.rectY);
-			}
-		}else if (GamePlay.player.y <= config.height/2 && GamePlay.rectY > 0){
-			GamePlay.player.y += GamePlay.rectY;
-		 	this.gameDownObsticles(GamePlay.rectY);
-		}else{
-		    this.gameDownObsticles(-GamePlay.rectY);
-		}
-		//Player direction
-		if (GamePlay.rectX > 0) {
-			GamePlay.rectX -= 1;
-		}else if(GamePlay.rectX < 0){
-			GamePlay.rectX += 1;
-		}
-		if (GamePlay.rectY < 4 && (GamePlay.counter < GamePlay.maxCounerValue/2 || 
-								   GamePlay.counter > 0 - GamePlay.maxCounerValue/2)){
-			GamePlay.rectY += 3;
-		}
+		this.player.angle += this.playerRotation;
+
+		//Movement
+		this.playerMovement();
+
 		//Fill 
 		this.fillObsticles();
 		
@@ -146,95 +209,23 @@ class GamePlay extends Phaser.Scene{
 		this.gameScore();
 
 		//Rectangle Loop
-		if(GamePlay.redRect[0].y > config.height){
-			GamePlay.redRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
-			GamePlay.redRect[0].y = GamePlay.greenRect[0].y - 400;
-			GamePlay.redRect[1].y = GamePlay.greenRect[0].y - 400;
-			GamePlay.redRect[0].x = Math.floor(Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN;
-			GamePlay.redRect[1].x = GamePlay.redRect[0].x + GamePlay.redRect[0].width + GamePlay.spaceBetween;
-			GamePlay.redScored = 0;
-		}else if(GamePlay.blueRect[0].y > config.height){
-			GamePlay.blueRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
-			GamePlay.blueRect[0].y = GamePlay.redRect[0].y - 400;
-			GamePlay.blueRect[1].y = GamePlay.redRect[0].y - 400;
-			GamePlay.blueRect[0].x = Math.floor(Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN;
-			GamePlay.blueRect[1].x = GamePlay.blueRect[0].x + GamePlay.blueRect[0].width + GamePlay.spaceBetween;
-			GamePlay.blueScored = 0;
-		}else if(GamePlay.greenRect[0].y > config.height){
-			GamePlay.greenRect[2] = GamePlay.colorArr[GamePlay.colorArr.length * Math.random() | 0];
-			GamePlay.greenRect[0].y = GamePlay.blueRect[0].y - 400;
-			GamePlay.greenRect[1].y = GamePlay.blueRect[0].y - 400;
-			GamePlay.greenRect[0].x = Math.floor(Math.random() * (GamePlay.MAX - GamePlay.MIN)) + GamePlay.MIN;
-			GamePlay.greenRect[1].x = GamePlay.greenRect[0].x + GamePlay.greenRect[0].width + GamePlay.spaceBetween;
-			GamePlay.greenScored = 0;
-		}
+		this.rectangleLoop();
 
-
-		//Left Rectangle collapse
-		if(GamePlay.player.y <= GamePlay.redRect[0].y+GamePlay.redRect[0].height+5 &&
-			GamePlay.player.x <= GamePlay.redRect[0].x + GamePlay.redRect[0].width){
-			this.gameOverCollaps(GamePlay.redRect[0].y,GamePlay.player.y);
-		}
-		if(GamePlay.player.y <= GamePlay.blueRect[0].y+GamePlay.blueRect[0].height+5 && 
-			GamePlay.player.x <= GamePlay.blueRect[0].x + GamePlay.blueRect[0].width){
-			this.gameOverCollaps(GamePlay.blueRect[0].y,GamePlay.player.y);
-		}
-		if(GamePlay.player.y <= GamePlay.greenRect[0].y+GamePlay.greenRect[0].height +5&& 
-			GamePlay.player.x <= GamePlay.greenRect[0].x + GamePlay.greenRect[0].width){
-			this.gameOverCollaps(GamePlay.greenRect[0].y,GamePlay.player.y);
-		}
-		//Right Rectangle collapse
-		if(GamePlay.player.y <= GamePlay.redRect[1].y+GamePlay.redRect[1].height +5&& 
-			GamePlay.player.x >= GamePlay.redRect[1].x){
-			this.gameOverCollaps(GamePlay.redRect[1].y,GamePlay.player.y);
-		}
-		if(GamePlay.player.y <= GamePlay.blueRect[1].y+GamePlay.blueRect[1].height +5&& 
-			GamePlay.player.x >= GamePlay.blueRect[1].x){
-			this.gameOverCollaps(GamePlay.blueRect[1].y,GamePlay.player.y);
-		}
-		if(GamePlay.player.y <= GamePlay.greenRect[1].y+GamePlay.greenRect[1].height +5&& 
-			GamePlay.player.x >= GamePlay.greenRect[1].x){
-			this.gameOverCollaps(GamePlay.greenRect[1].y,GamePlay.player.y);
-		}
+		//Player movement action
+		this.input.on('pointerdown', (pointer) =>{
+			if(pointer.x > config.width / 2){
+				this.counter = 1;
+			}else {
+				this.counter = -1;
+			}
+ 		});
+		 
 		// End game 
-		if (GamePlay.player.y > config.height){
-			if(GamePlay.score > parseInt(localStorage.getItem("makeItHighScore"))){
-				localStorage.setItem("makeItHighScore", GamePlay.score);
+		if (this.player.y > config.height){
+			if(this.score > parseInt(localStorage.getItem("makeItHighScore"))){
+				localStorage.setItem("makeItHighScore", this.score);
 			}
 			this.scene.start('gameOver');
 		}
-		//Player movement action
-		this.input.on('pointerdown', function(pointer){
-			if(pointer.x > config.width / 2){
-				GamePlay.counter = 1;
-			}else {
-				GamePlay.counter = -1;
-			}
- 		});
- 		//Movement
- 		if(GamePlay.counter > 0 && GamePlay.counter < GamePlay.maxCounerValue/2){
- 			GamePlay.rectX = GamePlay.xStep;
-			GamePlay.rectY = GamePlay.yStep;
-			GamePlay.playerRotation = 2;
-			GamePlay.counter += 1;
- 		}else if(GamePlay.counter > 0 && GamePlay.counter < GamePlay.maxCounerValue){
- 			GamePlay.rectX = GamePlay.xStep;
- 			GamePlay.playerRotation = 2;
-			GamePlay.counter += 1;
- 		}else if(GamePlay.counter < 0 && 
- 				 GamePlay.counter > (GamePlay.maxCounerValue - (GamePlay.maxCounerValue * 2))/2){
- 			GamePlay.rectX = -GamePlay.xStep;
-			GamePlay.rectY = GamePlay.yStep;
-			GamePlay.playerRotation = -2;
-			GamePlay.counter -= 1;
- 		}else if(GamePlay.counter < 0 && 
- 				 GamePlay.counter > (GamePlay.maxCounerValue - (GamePlay.maxCounerValue * 2))){
- 			GamePlay.rectX = -GamePlay.xStep;
- 			GamePlay.playerRotation = -2;
-			GamePlay.counter -= 1;
- 		}else{
- 			GamePlay.counter = 0;
- 		}
 	}
-
 }
