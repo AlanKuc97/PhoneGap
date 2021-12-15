@@ -6,11 +6,12 @@ class GameOver extends Phaser.Scene{
 		this.load.image('over','PNG/gameOver.png');
 	}
 	create(){
-		this.over = this.add.sprite(config.width/2,config.height/2,'over');
-		this.over.setScale(0.3);
-		this.input.once('pointerdown', function (event) {
-            this.scene.start('mainMenu');
-        }, this);
+		this.over = this.add.sprite(config.width/2,config.height/2,'over')
+			.setInteractive()
+			.on('pointerdown', () => {
+				this.scene.start('mainMenu');
+			});
+		this.over.setScale(0.5);
 
 		let interstitial;
         document.addEventListener('deviceready', async () => {
