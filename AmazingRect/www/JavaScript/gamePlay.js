@@ -6,8 +6,6 @@ class GamePlay extends Phaser.Scene{
 		this.load.audio('scoreUp', 'sounds/scoreUp.mp3');
 	}
 	create(){
-		//Sound
-		// this.sound.play('scoreUp');
 		//Creating player, setting display size and interactive
 		this.player = this.add.rectangle(config.width / 2,(config.height / 2)+100,16,16, 0x000000);
 		this.playerRotation = 0;
@@ -39,10 +37,10 @@ class GamePlay extends Phaser.Scene{
 						this.add.rectangle(550,-185,config.width,this.obsticleHeight,0x000000),0x000000];
 		this.secondRect[1].x = this.secondRect[0].x + this.secondRect[0].width + this.spaceBetween;
 		this.thirdRect = [this.add.rectangle(
-										Math.floor(
-											Math.random() * (this.MAX - this.MIN) + this.MIN),-585,
-											config.width,this.obsticleHeight,0x000000 
-											), 
+											Math.floor(
+												Math.random() * (this.MAX - this.MIN) + this.MIN),-585,
+												config.width,this.obsticleHeight,0x000000 
+												), 
 							this.add.rectangle(550,-585,config.width,this.obsticleHeight,0x000000), 0x000000];
 							this.thirdRect[1].x = this.thirdRect[0].x + this.thirdRect[0].width + this.spaceBetween;
 		
@@ -116,7 +114,6 @@ class GamePlay extends Phaser.Scene{
 			this.gameOverCollaps();
 		}
 		for(let i = 0; i < this.smallObstacles.length; i++){
-			console.log(this.smallObstacles[i]);
 			if(this.physics.collide(this.player, this.smallObstacles[i])){
 				this.gameOverCollaps();
 			}

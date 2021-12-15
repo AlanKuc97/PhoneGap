@@ -30,10 +30,10 @@
         <script src="cordova.js"></script>
         <script type="text/javascript">
             let banner;
-
             document.addEventListener('deviceready', async () => {
                 banner = new admob.BannerAd({
-                    adUnitId: 'ca-app-pub-6536582897404038/4027221482',
+                    adUnitId: 'ca-app-pub-6536582897404038/5501821737',
+				    autoShow:true
                 });
                 await banner.show();
             },false);
