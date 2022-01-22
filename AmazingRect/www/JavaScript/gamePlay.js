@@ -84,7 +84,7 @@ class GamePlay extends Phaser.Scene{
 		
 		//Score config
 		this.score = 0;
-		this.scoreText = this.add.text(10, 50, 'score: 0', { fontSize: '24px', fill: '#000' });
+		this.scoreText = this.add.text(10, 10, 'score: 0', { fontSize: '24px', fill: '#000' });
 		this.scoreText.setText('Score: ' + this.score);
 
 		//Flags to notice if rectangles > 750 to score		
