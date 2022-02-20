@@ -23,7 +23,7 @@ class MainMenu extends Phaser.Scene{
 		}else{
 			localStorage.setItem("makeItHighScore", this.highScore);
 		}
-		this.highScoreText = this.add.text(10, 10, 'score:', { fontSize: '24px', fill: '#000' });
+		this.highScoreText = this.add.text(10, 50, 'score:', { fontSize: '24px', fill: '#000' });
 		this.highScoreText.setText('High Score:' + this.highScore);
 		this.scaleDirection = 0.001;
 		// this.nameText = this.add.text(config.width/2,config.height/2 - 100 ,
